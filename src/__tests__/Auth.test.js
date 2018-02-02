@@ -2,7 +2,7 @@ import React from 'react';
 import Auth from '../Auth';
 import {shallow} from 'enzyme';
 import * as Api from '../AuthorizeApi';
-import {MemoryRouter, Redirect} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 
 jest.mock('../AuthorizeApi');
 
@@ -10,7 +10,7 @@ describe('Компонент Auth:', () => {
   describe('Методы класса:', () => {
     it('handleSubmit вызывает метод authorizeUser из модуля AuthorizeApi', () => {
       const mockAuthorizeUser = jest.fn().mockImplementation((e, p) => e === 'ee' && p === 'pp');
-      Api.setMockFn(mockAuthorizeUser);
+      Api.setMockAuthorizeUser(mockAuthorizeUser);
 
       const wrapper = shallow(<Auth />);
       wrapper.instance().handleSubmit();
@@ -22,21 +22,21 @@ describe('Компонент Auth:', () => {
 
       it('Присутствует input с name email', () => {
         expect(
-          wrapper.findWhere(el => el.type() === 'input' && el.props().name === 'email')
+          wrapper.findWhere(el => el.type() === 'input' && el.props().name === 'email'),
         ).toHaveLength(1);
       });
 
       it('Присутствует input с name password', () => {
         expect(
-          wrapper.findWhere(el => el.type() === 'input' && el.props().name === 'password')
+          wrapper.findWhere(el => el.type() === 'input' && el.props().name === 'password'),
         ).toHaveLength(1);
       });
 
       it('Присутствует button с onClick = handleSubmit', () => {
         expect(
           wrapper.findWhere(
-            el => el.type() === 'button' && el.props().onClick === wrapper.instance().handleSubmit
-          )
+            el => el.type() === 'button' && el.props().onClick === wrapper.instance().handleSubmit,
+          ),
         ).toHaveLength(1);
       });
 
@@ -46,13 +46,13 @@ describe('Компонент Auth:', () => {
 
       it('Если ввести неправильный email, password и нажать button с handleSumbit — появится p.error с информацией о не правильном пароле или почте', () => {
         const emailInput = wrapper.findWhere(
-          el => el.type() === 'input' && el.props().name === 'email'
+          el => el.type() === 'input' && el.props().name === 'email',
         );
         const passwordInput = wrapper.findWhere(
-          el => el.type() === 'input' && el.props().name === 'password'
+          el => el.type() === 'input' && el.props().name === 'password',
         );
         const button = wrapper.findWhere(
-          el => el.type() === 'button' && el.props().onClick === wrapper.instance().handleSubmit
+          el => el.type() === 'button' && el.props().onClick === wrapper.instance().handleSubmit,
         );
         emailInput.simulate('change', {target: {value: 'test', name: 'email'}});
         passwordInput.simulate('change', {target: {value: 'test', name: 'password'}});
@@ -66,7 +66,7 @@ describe('Компонент Auth:', () => {
         wrapper.setState({isAuthorized: true});
 
         expect(
-          wrapper.findWhere(el => el.type() === Redirect && el.props().to === '/')
+          wrapper.findWhere(el => el.type() === Redirect && el.props().to === '/'),
         ).toHaveLength(1);
       });
     });
